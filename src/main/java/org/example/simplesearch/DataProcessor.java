@@ -30,12 +30,12 @@ public class DataProcessor {
 
             lines.close();
 
-        } catch (IOException | NullPointerException | URISyntaxException e){
+        } catch (NullPointerException | URISyntaxException | IOException e){
             throw new RuntimeException(e);
         }
     }
 
-    private static void setDataWithIndexes(String index, String data){
+    public static void setDataWithIndexes(String index, String data){
         Arrays.stream(data.split(" "))
                 .forEach(x -> putWordIntoMap(x.toLowerCase(), Integer.valueOf(index)));
     }
