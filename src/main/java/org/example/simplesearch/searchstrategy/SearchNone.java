@@ -1,4 +1,4 @@
-package org.example.simplesearch.search;
+package org.example.simplesearch.searchstrategy;
 
 import org.example.simplesearch.datacontroller.DataProcessor;
 
