@@ -1,4 +1,4 @@
-package org.example.simplesearch;
+package org.example.simplesearch.search;
 
 import java.util.Set;
 

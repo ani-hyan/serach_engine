@@ -1,4 +1,6 @@
-package org.example.simplesearch;
+package org.example.simplesearch.search;
+
+import org.example.simplesearch.datacontroller.DataProcessor;
 
 import java.util.HashSet;
 import java.util.Set;

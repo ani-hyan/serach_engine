@@ -1,4 +1,4 @@
-package org.example.simplesearch;
+package org.example.simplesearch.datacontroller;
 
 import lombok.Getter;
 import java.io.IOException;

@@ -1,4 +1,10 @@
-package org.example.simplesearch;
+package org.example.simplesearch.seachengine;
+
+import org.example.simplesearch.datacontroller.DataProcessor;
+import org.example.simplesearch.search.Search;
+import org.example.simplesearch.search.SearchAll;
+import org.example.simplesearch.search.SearchAny;
+import org.example.simplesearch.search.SearchNone;
 
 import java.util.*;
 
