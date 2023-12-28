@@ -1,10 +1,10 @@
 package org.example.simplesearch.seachengine;
 
 import org.example.simplesearch.datacontroller.DataProcessor;
-import org.example.simplesearch.search.Search;
-import org.example.simplesearch.search.SearchAll;
-import org.example.simplesearch.search.SearchAny;
-import org.example.simplesearch.search.SearchNone;
+import org.example.simplesearch.searchstrategy.Search;
+import org.example.simplesearch.searchstrategy.SearchAll;
+import org.example.simplesearch.searchstrategy.SearchAny;
+import org.example.simplesearch.searchstrategy.SearchNone;
 
 import java.util.*;
 
@@ -38,7 +38,14 @@ public class Menu {
             switch (option) {
                 case 1:
                     System.out.println("Select a matching strategy: ALL, ANY, NONE");
-                    Set<String> s = searchBasedOnStrategy(validateStrategy(sc.next()));
+                    String strategy = validateStrategy(sc.next());
+
+                    System.out.println("Enter a name or email to search all suitable people.");
+                    sc.nextLine();
+                    String[] input = sc.nextLine().toLowerCase().split(" ");
+
+                    Set<String> s = searchBasedOnStrategy(strategy, input);
+
                     printResult(s);
                     break;
                 case 2:
@@ -50,22 +57,17 @@ public class Menu {
                     break;
             }
         } while (option != 0);
-
     }
 
 
-    public Set<String> searchBasedOnStrategy(String strategy) {
-        System.out.println("Enter a name or email to search all suitable people.");
-        sc.nextLine();
-        String[] input = sc.nextLine().toLowerCase().split(" ");
-
-        Search search = createSearch(strategy);
+    public Set<String> searchBasedOnStrategy(String strategy, String[] input) {
+        Search search = searchType(strategy);
 
         assert search != null;
         return search.result(input);
     }
 
-    private Search createSearch(String strategy) {
+    private Search searchType(String strategy) {
         return switch (strategy.toUpperCase()) {
             case "ANY" -> new SearchAny();
             case "ALL" -> new SearchAll();
@@ -88,7 +90,7 @@ public class Menu {
 
     public void printResult(Set<String> result){
         if (result != null && !result.isEmpty()) {
-            System.out.println(result.size() + " persons found:");
+            System.out.println("Number of persons found: " + result.size());
             result.forEach(System.out::println);
         } else {
             System.out.println("Nothing to show");
