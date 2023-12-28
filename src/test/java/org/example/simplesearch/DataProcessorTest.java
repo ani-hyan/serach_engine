@@ -1,5 +1,6 @@
 package org.example.simplesearch;
 
+import org.example.simplesearch.datacontroller.DataProcessor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,28 +17,13 @@ class DataProcessorTest {
     }
 
     @Test
-    void dataFromFileIntoMap() {
-
-        assertThrows(RuntimeException.class, () -> DataProcessor.dataFromFileIntoMap("file.txt"));
-
+    void dataFromFileIntoMapForDataWithIndexes() {
         DataProcessor.dataFromFileIntoMap("Data.txt");
 
-        ArrayList<String> data = DataProcessor.getData();
         Map<String, Set<Integer>> dataWithIndexes = DataProcessor.getDataWithIndexes();
 
-        assertFalse(data.isEmpty());
         assertFalse(dataWithIndexes.isEmpty());
 
-        assertEquals(6, data.size());
-
-        assertAll(
-                () -> assertEquals("Dwight Joseph djo@gmail.com", data.get(0)),
-                () -> assertEquals("Rene Webb webb@gmail.com", data.get(1)),
-                () -> assertEquals("Katie Jacobs", data.get(2)),
-                () -> assertEquals("Erick Harrington harrington@gmail.com", data.get(3)),
-                () -> assertEquals("Myrtle Medina", data.get(4)),
-                () -> assertEquals("Erick Burgess", data.get(5))
-        );
 
         assertAll(
                 () -> assertTrue(dataWithIndexes.containsKey("dwight")),
@@ -51,22 +37,39 @@ class DataProcessorTest {
         assertArrayEquals(new ArrayList<>(List.of(3, 5)).toArray(), dataWithIndexes.get("erick").toArray());
     }
 
-
     @Test
-    void putWordIntoMap() {
-        DataProcessor.putWordIntoMap("erick", 3);
-        Map<String, Set<Integer>> dataWithIndexes = DataProcessor.getDataWithIndexes();
+    void dataFromFileIntoMapForData(){
+        DataProcessor.dataFromFileIntoMap("Data.txt");
 
-        assertTrue(dataWithIndexes.containsKey("erick"));
-        assertEquals(1, dataWithIndexes.get("erick").size());
+        ArrayList<String> data = DataProcessor.getData();
 
-        DataProcessor.putWordIntoMap("erick", 5);
-        assertEquals(2, dataWithIndexes.get("erick").size());
-        assertTrue(dataWithIndexes.get("erick").contains(5));
-        assertTrue(dataWithIndexes.get("erick").contains(3));
+        assertFalse(data.isEmpty());
 
+        assertEquals(6, data.size());
+
+        assertAll(
+                () -> assertEquals("Dwight Joseph djo@gmail.com", data.get(0)),
+                () -> assertEquals("Rene Webb webb@gmail.com", data.get(1)),
+                () -> assertEquals("Katie Jacobs", data.get(2)),
+                () -> assertEquals("Erick Harrington harrington@gmail.com", data.get(3)),
+                () -> assertEquals("Myrtle Medina", data.get(4)),
+                () -> assertEquals("Erick Burgess", data.get(5))
+        );
     }
 
+    @Test
+    void dataFromFileIntoMapForException(){
+        String fileName = "file.txt";
+
+        Exception exception = assertThrows(RuntimeException.class,
+                () -> DataProcessor.dataFromFileIntoMap(fileName));
+
+        String expectedMessage = "File not found: " + fileName;
+        String actualMessage = exception.getMessage();
+        System.out.println(actualMessage);
+
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
 
     @Test
     void setDataWithIndexes() {
@@ -82,6 +85,5 @@ class DataProcessorTest {
                 () -> assertEquals(new HashSet<>(Set.of(0)), dataWithIndexes.get("djo@gmail.com"))
         );
     }
-
 
 }

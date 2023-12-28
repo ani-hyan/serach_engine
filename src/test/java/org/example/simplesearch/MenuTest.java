@@ -1,5 +1,7 @@
 package org.example.simplesearch;
 
+import org.example.simplesearch.datacontroller.DataProcessor;
+import org.example.simplesearch.seachengine.Menu;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -8,11 +10,12 @@ import java.io.PrintStream;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
+
 
 class MenuTest {
-    Menu menu;
 
+    Menu menu;
 
     @BeforeEach
     void setUp() {
@@ -25,10 +28,40 @@ class MenuTest {
     void start() {
     }
 
+
+   @Test
+   void searchBasedOnStrategyAll() {
+        DataProcessor.dataFromFileIntoMap("Data.txt");
+
+        String strategy = "all";
+        String[] input = {"dwight", "joseph"};
+        Set<String> output = Set.of("Dwight Joseph djo@gmail.com");
+
+        assertEquals(output, menu.searchBasedOnStrategy(strategy,input));
+   }
+
     @Test
-    void searchBasedOnStrategy() {
+    void searchBasedOnStrategyNone() {
+        DataProcessor.dataFromFileIntoMap("Data.txt");
+
+        String strategy = "none";
+        String[] input = {"dwight", "joseph"};
+
+        Set<String> actual = menu.searchBasedOnStrategy(strategy,input);
+
+        assertEquals(1, actual.size());
     }
 
+    @Test
+    void searchBasedOnStrategyAny() {
+        DataProcessor.dataFromFileIntoMap("Data.txt");
+
+        String strategy = "any";
+        String[] input = {"dwight", "joseph"};
+        Set<String> output = Set.of("Dwight Joseph djo@gmail.com");
+
+        assertEquals(output, menu.searchBasedOnStrategy(strategy,input));
+    }
     @Test
     void printMenu() {
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -45,7 +78,7 @@ class MenuTest {
     }
 
     @Test
-    void printResult() {
+    void printResultEmptyCase() {
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
 
@@ -55,8 +88,11 @@ class MenuTest {
         String expectedEmpty = "Nothing to show\n";
 
         assertEquals(expectedEmpty, outContent.toString());
+    }
 
-        outContent.reset();
+    @Test
+    void printResultNonEmptyCase(){
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
 
         Set<String> notEmptyResult = new HashSet<>();
@@ -64,7 +100,7 @@ class MenuTest {
         notEmptyResult.add("Erick Harrington harrington@gmail.com");
         menu.printResult(notEmptyResult);
 
-        String expectedNotEmpty = "2 persons found:\n"
+        String expectedNotEmpty = "Number of persons found: 2\n"
                 + "Erick Harrington harrington@gmail.com\n"
                 + "Erick Burgess\n";
 
